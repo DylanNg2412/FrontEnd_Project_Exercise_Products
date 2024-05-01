@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { getCategories, getProducts } from "../../utils/api";
+import { getProducts } from "../../utils/api";
+import { getCategories } from "../../utils/api_categories";
 
-import { Button, Grid } from "@mui/material";
 import {
   Box,
+  Button,
+  Grid,
   Typography,
   FormControl,
   Select,
@@ -16,9 +18,10 @@ import {
 } from "@mui/material";
 
 export default function Products() {
-  const { category, setCategory } = useState("all");
+  const [category, setCategory] = useState("all"); // store the selected category by user
+
   const { data = [] } = useQuery({
-    queryKey: ["products", category],
+    queryKey: ["product", category],
     queryFn: () => getProducts(category),
   });
   console.log(data);
@@ -46,28 +49,26 @@ export default function Products() {
             Add New
           </Button>
         </Box>
-        <FormControl sx={{ m: 1, minWidth: 156 }}>
-          <InputLabel id="demo-simple-select-label">All Categories</InputLabel>
 
-          <Select
-            labelId="demo-simple-select-label"
-            id="demo-simple-select"
-            label="All Categories"
-            value={category}
-            onChange={(event) => setCategory(event.target.value)}
-          >
-            <MenuItem value={"all"}>All Categories</MenuItem>
-            {categories.map((category) => (
-              <MenuItem key={category} value={category}>
-                {category}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
+        <Select
+          labelId="demo-simple-select-label"
+          id="demo-simple-select"
+          label="Genre"
+          value={category}
+          onChange={(event) => setCategory(event.target.value)}
+        >
+          <MenuItem value={"all"}>All Categories</MenuItem>
+
+          {categories.map((category) => (
+            <MenuItem key={category} value={category}>
+              {category}
+            </MenuItem>
+          ))}
+        </Select>
 
         <Grid container spacing={3}>
           {data.map((product) => (
-            <Grid item xs={4}>
+            <Grid key={product._id} item lg={4} md={6} sm={12} xs={12}>
               <Card>
                 <CardContent>
                   <Typography fontWeight={"bold"}>{product.name}</Typography>

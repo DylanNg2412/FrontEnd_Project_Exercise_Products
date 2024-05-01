@@ -16,15 +16,15 @@ export const getProducts = async (category) => {
     );
     return response.data;
   } catch (error) {
-    console.log("error", error);
+    // console.log("error", error);
+    console.log(error);
   }
 };
 
-export const getCategories = async () => {
-  try {
-    const response = await axios.get(API_URL + "/category");
-    return response.data;
-  } catch (error) {
-    console.log("error", error);
-  }
-};
+export const getProduct = async (id) => {};
+
+export const addProducts = async (data) => {};
+
+export const updateProducts = async (id, data) => {};
+
+export const deleteProducts = async (id) => {};
