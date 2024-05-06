@@ -122,7 +122,13 @@ export default function Carts() {
             paddingTop: "50px",
           }}
         >
-          <Button variant="contained">Checkout</Button>
+          {cart.length > 0 ? (
+            <Button variant="contained">Checkout</Button>
+          ) : (
+            <Button variant="contained" disabled>
+              Checkout
+            </Button>
+          )}
         </div>
       </Container>
     </>
