@@ -11,12 +11,15 @@ import {
   TableRow,
   Paper,
   Container,
+  Box,
 } from "@mui/material";
 import { getCart, removeItemFromCart } from "../../utils/api_cart";
 import Header from "../../components/Header";
 import { useSnackbar } from "notistack";
+import { useNavigate } from "react-router-dom";
 
 export default function Carts() {
+  const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
   const queryClient = useQueryClient();
 
@@ -84,7 +87,7 @@ export default function Carts() {
                   <TableCell>{row.price}</TableCell>
                   <TableCell align="center">{row.quantity}</TableCell>
                   <TableCell align="right">
-                    $ {row.quantity * row.price}
+                    $ {(row.quantity * row.price).toFixed(2)}
                   </TableCell>
                   <TableCell align="right">
                     <Button
@@ -104,7 +107,7 @@ export default function Carts() {
                 <TableCell colSpan={3} />
                 <TableCell align="right">
                   <Typography variant="body1" fontWeight="bold">
-                    $
+                    Total: $
                     {cart.reduce(
                       (total, row) => total + row.price * row.quantity,
                       0
@@ -115,21 +118,28 @@ export default function Carts() {
             </TableBody>
           </Table>
         </TableContainer>
-        <div
-          style={{
+        <Box
+          sx={{
             display: "flex",
             justifyContent: "end",
             paddingTop: "50px",
           }}
         >
           {cart.length > 0 ? (
-            <Button variant="contained">Checkout</Button>
+            <Button
+              variant="contained"
+              onClick={() => {
+                navigate("/checkout");
+              }}
+            >
+              Checkout
+            </Button>
           ) : (
             <Button variant="contained" disabled>
               Checkout
             </Button>
           )}
-        </div>
+        </Box>
       </Container>
     </>
   );

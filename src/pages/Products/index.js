@@ -38,8 +38,8 @@ export default function Products() {
     <>
       <Container>
         <Header />
-        <div
-          style={{
+        <Box
+          sx={{
             display: "flex",
             justifyContent: "space-between",
             paddingTop: "10px",
@@ -57,10 +57,15 @@ export default function Products() {
           >
             Add New
           </Button>
-        </div>
+        </Box>
 
         <FormControl
-          sx={{ marginTop: "10px", width: "200px", marginLeft: "10px" }}
+          sx={{
+            marginTop: "10px",
+            width: "200px",
+            marginLeft: "10px",
+            marginBottom: "20px",
+          }}
         >
           <InputLabel id="product-select-label">Category</InputLabel>
           <Select

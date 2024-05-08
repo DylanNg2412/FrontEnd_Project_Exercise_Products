@@ -5,12 +5,14 @@ export default function Header() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  let headerText = "";
+  let headerText = "Welcome to my store";
 
-  if (location.pathname === "/") {
-    headerText = "Welcome to my store";
-  } else if (location.pathname === "/cart") {
+  if (location.pathname === "/cart") {
     headerText = "Cart";
+  } else if (location.pathname === "/checkout") {
+    headerText = "Checkout";
+  } else if (location.pathname === "/order") {
+    headerText = "My Orders";
   }
 
   return (
@@ -28,13 +30,18 @@ export default function Header() {
           {headerText}
         </Typography>
       </Box>
-      <div
-        style={{
+      <Box
+        sx={{
           display: "flex",
           justifyContent: "center",
+          marginBottom: "20px",
         }}
       >
         <Button
+          sx={{
+            color: location.pathname === "/" ? "white" : "inherit",
+            backgroundColor: location.pathname === "/" ? "#238be6" : "inherit",
+          }}
           onClick={() => {
             navigate("/");
           }}
@@ -53,7 +60,19 @@ export default function Header() {
         >
           Cart
         </Button>
-      </div>
+        <Button
+          sx={{
+            color: location.pathname === "/order" ? "white" : "inherit",
+            backgroundColor:
+              location.pathname === "/order" ? "#238be6" : "inherit",
+          }}
+          onClick={() => {
+            navigate("/order");
+          }}
+        >
+          My Orders
+        </Button>
+      </Box>
 
       <Divider />
     </>

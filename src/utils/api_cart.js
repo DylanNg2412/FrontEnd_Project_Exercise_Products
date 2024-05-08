@@ -1,6 +1,5 @@
 export function addToCart(product) {
   let cart = JSON.parse(localStorage.getItem("cart")) || [];
-  console.log(product);
   const productCart = cart.find((c) => c._id === product._id);
   if (productCart) {
     productCart.quantity++;
