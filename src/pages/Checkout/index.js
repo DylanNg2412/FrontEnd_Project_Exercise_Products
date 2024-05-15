@@ -10,7 +10,7 @@ import {
   TextField,
 } from "@mui/material";
 
-import { getCart } from "../../utils/api_cart";
+import { getCart, emptyCart } from "../../utils/api_cart";
 import Header from "../../components/Header";
 import { useSnackbar } from "notistack";
 import { addNewOrder } from "../../utils/api_orders";
@@ -29,10 +29,12 @@ export default function Checkout() {
 
   const addNewOrderMutation = useMutation({
     mutationFn: addNewOrder,
-    onSuccess: () => {
-      // redirect to payment gateway //!( not yet )
-      // for now is temporary redirect
-      navigate("/orders");
+    onSuccess: (responseData) => {
+      emptyCart();
+      //get the billplz url (responseData.billplz_url)
+      const billplz_url = responseData.billplz_url;
+      // redirect to payment gateway
+      window.location.href = billplz_url; // javascript version of redirect
     },
     onError: (error) => {
       enqueueSnackbar(error.response.data.message, {
@@ -132,7 +134,7 @@ export default function Checkout() {
                 style={{ marginTop: "20px" }}
                 onClick={handleCheckout}
               >
-                Pay ${calculateTotal()}now
+                Pay ${calculateTotal()} now
               </Button>
             </Grid>
           </Grid>

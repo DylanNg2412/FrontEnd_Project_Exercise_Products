@@ -11,8 +11,12 @@ export default function Header() {
     headerText = "Cart";
   } else if (location.pathname === "/checkout") {
     headerText = "Checkout";
-  } else if (location.pathname === "/order") {
+  } else if (location.pathname === "/orders") {
     headerText = "My Orders";
+  } else if (location.pathname === "/login") {
+    headerText = "Login";
+  } else if (location.pathname === "/signup") {
+    headerText = "Create A New Account";
   }
 
   return (
@@ -62,15 +66,39 @@ export default function Header() {
         </Button>
         <Button
           sx={{
-            color: location.pathname === "/order" ? "white" : "inherit",
+            color: location.pathname === "/orders" ? "white" : "inherit",
             backgroundColor:
-              location.pathname === "/order" ? "#238be6" : "inherit",
+              location.pathname === "/orders" ? "#238be6" : "inherit",
           }}
           onClick={() => {
-            navigate("/order");
+            navigate("/orders");
           }}
         >
           My Orders
+        </Button>
+        <Button
+          sx={{
+            color: location.pathname === "/login" ? "white" : "inherit",
+            backgroundColor:
+              location.pathname === "/login" ? "#238be6" : "inherit",
+          }}
+          onClick={() => {
+            navigate("/login");
+          }}
+        >
+          Login
+        </Button>
+        <Button
+          sx={{
+            color: location.pathname === "/signup" ? "white" : "inherit",
+            backgroundColor:
+              location.pathname === "/signup" ? "#238be6" : "inherit",
+          }}
+          onClick={() => {
+            navigate("/signup");
+          }}
+        >
+          Sign Up
         </Button>
       </Box>
 

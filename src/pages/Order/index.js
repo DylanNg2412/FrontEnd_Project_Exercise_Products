@@ -118,6 +118,7 @@ export default function Order() {
                       labelId="demo-simple-select-label"
                       id="demo-simple-select"
                       value={order.status}
+                      disabled={order.status === "pending"}
                       onChange={(event) => {
                         handleUpdateOrder(order, event.target.value);
                       }}
@@ -132,18 +133,7 @@ export default function Order() {
                   <TableCell align="left">
                     {order.status === "failed" ||
                     order.status === "paid" ||
-                    order.status === "completed" ? (
-                      <Button
-                        variant="outlined"
-                        color="error"
-                        onClick={() => {
-                          handleOrderDelete(order._id);
-                        }}
-                        disabled
-                      >
-                        Delete
-                      </Button>
-                    ) : (
+                    order.status === "complete" ? null : ( // Button is not rendered when status is failed, paid, or complete
                       <Button
                         variant="outlined"
                         color="error"
