@@ -2,8 +2,12 @@ import axios from "axios";
 
 const url = "http://localhost:5000";
 
-export const getOrders = async () => {
-  const res = await axios.get(`${url}/orders`);
+export const getOrders = async (token) => {
+  const res = await axios.get(`${url}/orders`, {
+    headers: {
+      Authorization: "Bearer " + token,
+    },
+  });
   return res.data;
 };
 
@@ -23,12 +27,17 @@ export const updateOrder = async (data) => {
     JSON.stringify(data),
     {
       headers: { "Content-Type": "application/json" },
+      Authorization: "Bearer " + data.token,
     }
   );
   return response.data;
 };
 
-export const deleteOrder = async (id) => {
-  const response = await axios.delete(`${url}/orders/${id}`);
+export const deleteOrder = async (data) => {
+  const response = await axios.delete(`${url}/orders/${data._id}`, {
+    headers: {
+      Authorization: "Bearer " + data.token,
+    },
+  });
   return response.data;
 };

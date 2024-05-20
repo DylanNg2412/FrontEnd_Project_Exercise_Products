@@ -22,17 +22,22 @@ import Header from "../../components/Header";
 import { useSnackbar } from "notistack";
 import { deleteOrder, getOrders, updateOrder } from "../../utils/api_orders";
 import { useNavigate } from "react-router-dom";
+import { useCookies } from "react-cookie";
 
 export default function Order() {
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
   const queryClient = useQueryClient();
+  const [cookies] = useCookies(["currentUser"]);
+  const { currentUser = {} } = cookies;
+  const { role, token } = currentUser;
 
   const { data: orders = [] } = useQuery({
-    queryKey: ["order"],
-    queryFn: () => getOrders(),
+    queryKey: ["order", token],
+    queryFn: () => getOrders(token),
   });
   console.log(orders);
+
   const deleteOrderMutation = useMutation({
     mutationFn: deleteOrder,
     onSuccess: () => {
@@ -50,10 +55,13 @@ export default function Order() {
     },
   });
 
-  const handleOrderDelete = (id) => {
+  const handleOrderDelete = (_id) => {
     const confirm = window.confirm("Are you sure to delete this order?");
     if (confirm) {
-      deleteOrderMutation.mutate(id);
+      deleteOrderMutation.mutate({
+        _id: _id,
+        token: token,
+      });
     }
   };
 
@@ -78,6 +86,7 @@ export default function Order() {
     updateOrderMutation.mutate({
       ...order,
       status: status,
+      token: token,
     });
   };
 
@@ -109,7 +118,7 @@ export default function Order() {
                   </TableCell>
                   <TableCell align="left">
                     {order.products.map((product) => (
-                      <Typography>{product.name}</Typography>
+                      <Typography key={product._id}>{product.name}</Typography>
                     ))}
                   </TableCell>
                   <TableCell align="left">{order.totalPrice}</TableCell>

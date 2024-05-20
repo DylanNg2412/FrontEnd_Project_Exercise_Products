@@ -12,9 +12,13 @@ import {
   TextField,
 } from "@mui/material";
 import { addProduct } from "../../utils/api_products";
+import { useCookies } from "react-cookie";
 
 export default function ProductsAddNew() {
   const navigate = useNavigate();
+  const [cookies] = useCookies(["currentUser"]);
+  const { currentUser = {} } = cookies;
+  const { token } = currentUser;
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
@@ -41,6 +45,7 @@ export default function ProductsAddNew() {
       description: description,
       price: price,
       category: category,
+      token: token,
     });
   };
 

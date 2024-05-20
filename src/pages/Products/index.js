@@ -89,7 +89,7 @@ export default function Products() {
           </Select>
         </FormControl>
 
-        <Grid container spacing={3}>
+        <Grid item container spacing={3}>
           {products.map((product) => (
             <Grid key={product._id} item lg={4} md={6} xs={12}>
               <ProductCard product={product} />

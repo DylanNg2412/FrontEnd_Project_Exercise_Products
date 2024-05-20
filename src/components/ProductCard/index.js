@@ -1,12 +1,16 @@
 import { useNavigate } from "react-router-dom";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useSnackbar } from "notistack";
+import { useCookies } from "react-cookie";
 
 import { Typography, Button, Card, CardContent, Box } from "@mui/material";
 import { deleteProduct } from "../../utils/api_products";
 import { addToCart } from "../../utils/api_cart";
 
 export default function ProductCard(props) {
+  const [cookies] = useCookies(["currentUser"]);
+  const { currentUser = {} } = cookies;
+  const { role, token } = currentUser;
   const { product } = props;
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
@@ -34,7 +38,10 @@ export default function ProductCard(props) {
     event.preventDefault();
     const confirm = window.confirm("Are you sure to delete this product?");
     if (confirm) {
-      deleteProductMutation.mutate(product._id);
+      deleteProductMutation.mutate({
+        _id: product._id,
+        token: token,
+      });
     }
   };
 
@@ -52,15 +59,24 @@ export default function ProductCard(props) {
     },
   });
 
-  const handleCartSubmit = (event) => {
-    event.preventDefault();
-    addToCartMutation.mutate(product);
-    // console.log(product);
-  };
+  // const handleCartSubmit = (event) => {
+  //   event.preventDefault();
+  //   addToCartMutation.mutate(product);
+  // console.log(product);
+  // };
 
   return (
     <Card>
       <CardContent>
+        <img
+          src={
+            "http://localhost:5000/" +
+            (product.image && product.image !== ""
+              ? product.image
+              : "uploads/default_image.png")
+          }
+          width="100%"
+        />
         <Typography fontWeight={"bold"}>{product.name}</Typography>
         <Box
           style={{
@@ -98,36 +114,44 @@ export default function ProductCard(props) {
           fullWidth
           variant="contained"
           color="primary"
-          onClick={handleCartSubmit}
+          onClick={() => {
+            if (currentUser && currentUser.email) {
+              addToCartMutation.mutate(product);
+            } else {
+              enqueueSnackbar("Please login first");
+            }
+          }}
         >
           Add To Cart
         </Button>
-        <Box
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            margin: "10px 0",
-          }}
-        >
-          <Button
-            variant="contained"
-            style={{ borderRadius: "17px" }}
-            color="primary"
-            onClick={() => {
-              navigate("/products/" + product._id);
+        {role && role === "admin" ? (
+          <Box
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              margin: "10px 0",
             }}
           >
-            Edit
-          </Button>
-          <Button
-            variant="contained"
-            style={{ borderRadius: "17px" }}
-            color="error"
-            onClick={handleProductDelete}
-          >
-            Delete
-          </Button>
-        </Box>
+            <Button
+              variant="contained"
+              style={{ borderRadius: "17px" }}
+              color="primary"
+              onClick={() => {
+                navigate("/products/" + product._id);
+              }}
+            >
+              Edit
+            </Button>
+            <Button
+              variant="contained"
+              style={{ borderRadius: "17px" }}
+              color="error"
+              onClick={handleProductDelete}
+            >
+              Delete
+            </Button>
+          </Box>
+        ) : null}
       </CardContent>
     </Card>
   );
