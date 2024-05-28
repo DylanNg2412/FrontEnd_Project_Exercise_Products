@@ -105,7 +105,7 @@ export default function Header() {
             </Button>
           ) : null}
         </Box>
-        {currentUser && role ? (
+        {currentUser && currentUser.role ? (
           <Box sx={{ display: " flex", alignItems: "center", gap: "10px" }}>
             <span>Current User: {currentUser.name}</span>
             <Button

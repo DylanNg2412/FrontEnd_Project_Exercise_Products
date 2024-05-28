@@ -107,7 +107,9 @@ export default function ProductCard(props) {
               paddingRight: "10px",
             }}
           >
-            {product.category}
+            {product.category && product.category.name
+              ? product.category.name
+              : ""}
           </Typography>
         </Box>
         <Button

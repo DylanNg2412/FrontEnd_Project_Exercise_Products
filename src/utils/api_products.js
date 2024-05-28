@@ -1,15 +1,13 @@
 import axios from "axios";
 
-const url = "http://localhost:5000";
+import { url } from "./data";
 
 export const getProducts = async (category, page, perPage) => {
   let params = {
     perPage: perPage,
     page: page,
   };
-  if (category !== "all") {
-    params.category = category;
-  }
+  if (category !== "all") params.category = category;
   const query = new URLSearchParams(params);
   const res = await axios.get(`${url}/products?${query.toString()}`);
   return res.data;

@@ -78,6 +78,7 @@ export default function Checkout() {
       <Container maxWidth="lg">
         <Header />
         <Grid
+          item
           container
           spacing={2}
           sx={{
@@ -89,7 +90,7 @@ export default function Checkout() {
             },
           }}
         >
-          <Grid xs={12} md={7}>
+          <Grid item xs={12} md={7}>
             <Box
               sx={{
                 display: "flex",

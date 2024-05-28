@@ -22,17 +22,18 @@ export default function Products() {
   const [category, setCategory] = useState("all"); // store the selected category by user
   const [page, setPage] = useState(1);
   const [perPage, setPerPage] = useState(6);
+
   // load the categories
   const { data: categories = [] } = useQuery({
     queryKey: ["categories"],
     queryFn: () => getCategories(),
   });
+
   // load the products
   const { data: products = [] } = useQuery({
     queryKey: ["products", category, page, perPage],
     queryFn: () => getProducts(category, page, perPage), // pass in the category to filter out the product
   });
-  console.log(products);
 
   return (
     <>
@@ -81,8 +82,8 @@ export default function Products() {
             <MenuItem value="all">All</MenuItem>
             {categories.map((category) => {
               return (
-                <MenuItem key={category} value={category}>
-                  {category}
+                <MenuItem key={category._id} value={category._id}>
+                  {category.name}
                 </MenuItem>
               );
             })}
@@ -90,12 +91,14 @@ export default function Products() {
         </FormControl>
 
         <Grid item container spacing={3}>
-          {products.map((product) => (
-            <Grid key={product._id} item lg={4} md={6} xs={12}>
-              <ProductCard product={product} />
-            </Grid>
-          ))}
-          {products.length === 0 ? (
+          {products
+            ? products.map((product) => (
+                <Grid key={product._id} item lg={4} md={6} xs={12}>
+                  <ProductCard product={product} />
+                </Grid>
+              ))
+            : null}
+          {products && products.length === 0 ? (
             <Grid item xs={12}>
               <Typography align="center" sx={{ padding: "10px 0" }}>
                 No items found.

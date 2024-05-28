@@ -11,10 +11,13 @@ import {
   Card,
   CardContent,
   TextField,
+  MenuItem,
+  Select,
 } from "@mui/material";
 import { getProduct, updateProduct } from "../../utils/api_products";
 import { uploadImage } from "../../utils/api_images";
 import { useCookies } from "react-cookie";
+import { getCategories } from "../../utils/api_categories";
 
 export default function ProductsAddNew() {
   const { id } = useParams();
@@ -37,6 +40,11 @@ export default function ProductsAddNew() {
   } = useQuery({
     queryKey: ["product", id],
     queryFn: () => getProduct(id),
+  });
+
+  const { data: categories = [] } = useQuery({
+    queryKey: ["categories"],
+    queryFn: () => getCategories(),
   });
 
   // when data is fetched from API, set the states for all the fields with its current value
@@ -155,20 +163,31 @@ export default function ProductsAddNew() {
               />
             </Grid>
             <Grid item xs={12}>
-              <TextField
-                label="Category"
-                variant="outlined"
-                fullWidth
+              <Select
+                labelId="product-select-label"
+                id="product-select"
+                label="Product"
                 value={category}
-                onChange={(e) => setCategory(e.target.value)}
-              />
+                onChange={(event) => {
+                  setCategory(event.target.value);
+                }}
+              >
+                <MenuItem value="">Select a Category</MenuItem>
+                {categories.map((category) => {
+                  return (
+                    <MenuItem key={category._id} value={category._id}>
+                      {category.name}
+                    </MenuItem>
+                  );
+                })}
+              </Select>
             </Grid>
             <Grid item xs={12}>
               {image !== "" ? (
                 <>
                   <div>
                     <img
-                      src={"http://localhost:5000/" + image}
+                      src={"https://localhost:5000/" + image}
                       width="300px"
                       height="300px"
                     />
