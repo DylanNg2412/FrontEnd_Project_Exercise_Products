@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import Header from "../../components/Header";
 import {
   Typography,
@@ -10,8 +10,11 @@ import {
   Card,
   CardContent,
   TextField,
+  Select,
+  MenuItem,
 } from "@mui/material";
 import { addProduct } from "../../utils/api_products";
+import { getCategories } from "../../utils/api_categories";
 import { useCookies } from "react-cookie";
 
 export default function ProductsAddNew() {
@@ -23,6 +26,11 @@ export default function ProductsAddNew() {
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
   const [category, setCategory] = useState("");
+
+  const { data: categories = [] } = useQuery({
+    queryKey: ["categories"],
+    queryFn: () => getCategories(),
+  });
 
   // setup mutation for add new product
   const addNewMutation = useMutation({
@@ -94,13 +102,22 @@ export default function ProductsAddNew() {
               />
             </Grid>
             <Grid item xs={12}>
-              <TextField
-                label="Category"
-                variant="outlined"
-                fullWidth
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                label="Genre"
                 value={category}
-                onChange={(e) => setCategory(e.target.value)}
-              />
+                onChange={(e) => {
+                  setCategory(e.target.value);
+                }}
+              >
+                <MenuItem value="all">All Categories</MenuItem>
+                {categories.map((category) => (
+                  <MenuItem key={category._id} value={category._id}>
+                    {category.name}
+                  </MenuItem>
+                ))}
+              </Select>
             </Grid>
             <Grid item xs={12}>
               <Button variant="contained" fullWidth onClick={handleFormSubmit}>
